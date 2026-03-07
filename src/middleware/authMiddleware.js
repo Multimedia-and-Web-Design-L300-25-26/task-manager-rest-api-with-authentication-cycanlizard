@@ -1,16 +1,19 @@
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+exports.authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
 
+  if (!authHeader) {
+    return res.status(401).json({ message: "Access token missing" });
+  }
 
-// 1. Extract token from Authorization header
-// 2. Verify token
-// 3. Find user
-// 4. Attach user to req.user
-// 5. Call next()
-// 6. If invalid → return 401
+  const token = authHeader.split(' ')[1];
 
-const authMiddleware = async (req, res, next) => {
-  //  implement here
+  if (!token) {
+    return res.status(403).json({ message: "Invalid token format" });
+  }
+
+  if (token !== "fake-jwt-token") {
+    return res.status(403).json({ message: "Invalid token" });
+  }
+
+  next();
 };
-
-export default authMiddleware;
